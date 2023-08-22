@@ -10,8 +10,7 @@ class NotesApp(private val scanner: Scanner) {
 
             when (choice) {
                 1 -> showArchivesMenu()
-                2 -> createArchive()
-                3 -> {
+                2 -> {
                     println("Выход из приложения.")
                     break
                 }
@@ -23,8 +22,7 @@ class NotesApp(private val scanner: Scanner) {
     private fun printMainMenu() {
         println("Главное меню:")
         println("1. Показать архивы")
-        println("2. Создать архив")
-        println("3. Выход")
+        println("2. Выход")
         print("Выберите вариант: ")
     }
 
@@ -40,16 +38,27 @@ class NotesApp(private val scanner: Scanner) {
     }
 
     private fun showArchivesMenu() {
-        println("Архивы:")
-        for ((index, archive) in archives.withIndex()) {
-            println("$index. ${archive.name}")
-        }
+        while (true) {
+            println("Архивы:")
+            for ((index, archive) in archives.withIndex()) {
+                println("$index. ${archive.name}")
+            }
 
-        print("Введите номер архива для просмотра заметок: ")
-        val archiveChoice = readIntInput(scanner)
-        if (archiveChoice in 0 until archives.size) {
-            val selectedArchive = archives[archiveChoice]
-            showNotesMenu(selectedArchive)
+            println("${archives.size}. Создать новый архив")
+            println("${archives.size + 1}. Вернуться в главное меню")
+            print("Введите номер архива для просмотра заметок")
+            print("Выберите вариант:")
+            val archiveChoice = readIntInput(scanner)
+
+            when {
+                archiveChoice in 0 until archives.size -> {
+                    val selectedArchive = archives[archiveChoice]
+                    showNotesMenu(selectedArchive)
+                }
+                archiveChoice == archives.size -> createArchive()
+                archiveChoice == archives.size + 1 -> return
+                else -> println("Некорректный выбор. Пожалуйста, выберите правильный вариант.")
+            }
         }
     }
 
@@ -58,6 +67,13 @@ class NotesApp(private val scanner: Scanner) {
         val archiveName = scanner.nextLine()
         archives.add(Archive(archiveName))
         println("Архив '$archiveName' создан.")
+        println("1. Вернуться к списку архивов")
+        print("Выберите вариант: ")
+        val choice = readIntInput(scanner)
+        when (choice) {
+            1 -> return
+            else -> println("Некорректный выбор. Пожалуйста, выберите правильный вариант.")
+        }
     }
 
     private fun showNotesMenu(archive: Archive) {
@@ -69,6 +85,7 @@ class NotesApp(private val scanner: Scanner) {
 
             println("${archive.notes.size}. Создать новую заметку")
             println("${archive.notes.size + 1}. Вернуться в меню архива")
+            print("Введите номер заметки для просмотра деталей")
             print("Выберите вариант: ")
             val noteChoice = readIntInput(scanner)
 
@@ -77,7 +94,7 @@ class NotesApp(private val scanner: Scanner) {
                     val selectedNote = archive.notes[noteChoice]
                     showNoteDetails(selectedNote, archive)
                 }
-                noteChoice == archive.notes.size -> createNewNote(archive)
+                noteChoice == archive.notes.size -> createNote(archive)
                 noteChoice == archive.notes.size + 1 -> return
                 else -> println("Некорректный выбор. Пожалуйста, выберите правильный вариант.")
             }
@@ -89,7 +106,7 @@ class NotesApp(private val scanner: Scanner) {
         println(note.text)
         while (true) {
             println("1. Вернуться к списку заметок")
-            print("Выберите вариант: ")
+            print("Выберите вариант:")
             val choice = readIntInput(scanner)
             when (choice) {
                 1 -> return
@@ -98,10 +115,17 @@ class NotesApp(private val scanner: Scanner) {
         }
     }
 
-    private fun createNewNote(archive: Archive) {
+    private fun createNote(archive: Archive) {
         print("Введите текст новой заметки: ")
         val noteText = scanner.nextLine()
         archive.notes.add(Note(noteText))
         println("Заметка успешно добавлена.")
+        println("1. Вернуться к списку заметок")
+        print("Выберите вариант: ")
+        val choice = readIntInput(scanner)
+        when (choice) {
+            1 -> return
+            else -> println("Некорректный выбор. Пожалуйста, выберите правильный вариант.")
+        }
     }
 }
