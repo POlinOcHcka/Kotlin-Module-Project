@@ -14,7 +14,7 @@ class NotesApp(private val scanner: Scanner) {
                     println("Выход из приложения.")
                     break
                 }
-                else -> println("Некорректный выбор. Пожалуйста, выберите правильный вариант.")
+                else -> println("Некорректный выбор. Пожалуйста, выберите один из пунктов меню.")
             }
         }
     }
@@ -46,7 +46,7 @@ class NotesApp(private val scanner: Scanner) {
 
             println("${archives.size}. Создать новый архив")
             println("${archives.size + 1}. Вернуться в главное меню")
-            print("Введите номер архива для просмотра заметок")
+            print("Введите номер архива для просмотра заметок. ")
             print("Выберите вариант:")
             val archiveChoice = readIntInput(scanner)
 
@@ -85,7 +85,7 @@ class NotesApp(private val scanner: Scanner) {
 
             println("${archive.notes.size}. Создать новую заметку")
             println("${archive.notes.size + 1}. Вернуться в меню архива")
-            print("Введите номер заметки для просмотра деталей")
+            print("Введите номер заметки для просмотра деталей. ")
             print("Выберите вариант: ")
             val noteChoice = readIntInput(scanner)
 
@@ -116,9 +116,18 @@ class NotesApp(private val scanner: Scanner) {
     }
 
     private fun createNote(archive: Archive) {
+        print("Введите название новой заметки или оставьте пустым: ")
+        val noteName = scanner.nextLine()
         print("Введите текст новой заметки: ")
         val noteText = scanner.nextLine()
-        archive.notes.add(Note(noteText))
+
+        val displayText = if (noteName.isNotBlank()) {
+            noteName
+        } else {
+            noteText.take(15)
+        }
+
+        archive.notes.add(Note(displayText, noteText))
         println("Заметка успешно добавлена.")
         println("1. Вернуться к списку заметок")
         print("Выберите вариант: ")
