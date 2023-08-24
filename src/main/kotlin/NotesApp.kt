@@ -116,18 +116,9 @@ class NotesApp(private val scanner: Scanner) {
     }
 
     private fun createNote(archive: Archive) {
-        print("Введите название новой заметки или оставьте пустым: ")
-        val noteName = scanner.nextLine()
         print("Введите текст новой заметки: ")
         val noteText = scanner.nextLine()
-
-        val displayText = if (noteName.isNotBlank()) {
-            noteName
-        } else {
-            noteText.take(15)
-        }
-
-        archive.notes.add(Note(displayText, noteText))
+        archive.notes.add(Note(noteText))
         println("Заметка успешно добавлена.")
         println("1. Вернуться к списку заметок")
         print("Выберите вариант: ")
